@@ -24,7 +24,7 @@
             description="Setup external dependencies and migrate data" depends="build-config" />
 
     <target name="build-config" description="Build the local configuration">
-        <loadfile property="configcontent" file="${project.basedir}/config/autoload/orm.local.php.dist">
+        <loadfile property="db.config-content" file="${project.basedir}/config/autoload/orm.local.php.dist">
             <filterchain>
                 <replacetokens begintoken="##" endtoken="##">
                     <token key="DB_HOST" value="${db.host}" />
@@ -35,6 +35,6 @@
                 </replacetokens>
             </filterchain>
         </loadfile>
-	    <echo message="${configcontent}" file="${project.basedir}/config/autoload/orm.local.php" append="false" />
+	    <echo message="${db.config-content}" file="${project.basedir}/config/autoload/orm.local.php" append="false" />
     </target>
 </project>
