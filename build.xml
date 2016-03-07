@@ -19,9 +19,12 @@
     
     <target name="provision-stack"
             description="Provision a stack on AWS" />
-    
-    <target name="setup"
-            description="Setup external dependencies and migrate data" depends="build-config, init-db, migrate-db" />
+
+	<target name="setup"
+	        description="Setup external dependencies and migrate data" depends="build-config, init-db, migrate-db" />
+
+	<target name="packaging"
+	        description="Task to package" depends="cleanup" />
 
     <target name="build-config" description="Build the local configuration">
         <loadfile property="db.config-content" file="${project.basedir}/config/autoload/orm.local.php.dist">
@@ -56,5 +59,22 @@
 		<exec command="${doctrine.bin} orm:clear-cache:metadata" passthru="true" />
 		<!-- clear the cache of queries -->
 		<exec command="${doctrine.bin} orm:clear-cache:query" passthru="true" />
+	</target>
+
+	<target name="cleanup">
+		<if>
+			<and>
+				<isset property="continuousphp.commit" />
+				<not>
+					<equals arg1="${continuousphp.commit}" arg2="" />
+				</not>
+			</and>
+			<then>
+				<delete dir=".git" failonerror="true" />
+			</then>
+			<else>
+				<echo message="not on continuous" />
+			</else>
+		</if>
 	</target>
 </project>
