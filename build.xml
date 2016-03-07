@@ -21,7 +21,7 @@
             description="Provision a stack on AWS" />
     
     <target name="setup"
-            description="Setup external dependencies and migrate data" depends="build-config" />
+            description="Setup external dependencies and migrate data" depends="build-config, init-db, migrate-db" />
 
     <target name="build-config" description="Build the local configuration">
         <loadfile property="db.config-content" file="${project.basedir}/config/autoload/orm.local.php.dist">
@@ -37,4 +37,12 @@
         </loadfile>
 	    <echo message="${db.config-content}" file="${project.basedir}/config/autoload/orm.local.php" append="false" />
     </target>
+
+	<target name="init-db">
+		<!-- create if not exist -->
+	</target>
+
+	<target name="migrate-db">
+		<!-- create if not exist -->
+	</target>
 </project>
