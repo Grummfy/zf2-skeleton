@@ -21,7 +21,7 @@
             description="Provision a stack on AWS" />
     
     <target name="setup"
-            description="Setup external dependencies and migrate data"/>
+            description="Setup external dependencies and migrate data" depends="build-config" />
 
     <target name="build-config" description="Build the local configuration">
         <loadfile property="configcontent" file="${project.basedir}/config/autoload/orm.local.php.dist">
