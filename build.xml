@@ -50,6 +50,11 @@
 	</target>
 
 	<target name="migrate-db">
-		<!-- create if not exist -->
+		<!-- migrate database -->
+		<exec command="${doctrine.bin} migration:migrate --no-interaction" passthru="true" />
+		<!-- clear the cache of metadata -->
+		<exec command="${doctrine.bin} orm:clear-cache:metadata" passthru="true" />
+		<!-- clear the cache of queries -->
+		<exec command="${doctrine.bin} orm:clear-cache:query" passthru="true" />
 	</target>
 </project>
