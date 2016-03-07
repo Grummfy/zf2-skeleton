@@ -22,4 +22,19 @@
     
     <target name="setup"
             description="Setup external dependencies and migrate data"/>
+
+    <target name="build-config" description="Build the local configuration">
+        <loadfile property="configcontent" file="${project.basedir}/config/autoload/orm.local.php.dist">
+            <filterchain>
+                <replacetokens begintoken="##" endtoken="##">
+                    <token key="DB_HOST" value="${db.host}" />
+                    <token key="DB_USER" value="${db.username}" />
+                    <token key="DB_PASSWORD" value="${db.password}" />
+                    <token key="DB_NAME" value="${db.dbname}" />
+                    <token key="DB_PORT" value="${db.port}" />
+                </replacetokens>
+            </filterchain>
+        </loadfile>
+	    <echo message="${configcontent}" file="${project.basedir}/config/autoload/orm.local.php" append="false" />
+    </target>
 </project>

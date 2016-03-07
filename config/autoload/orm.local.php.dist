@@ -1,0 +1,16 @@
+<?php
+return [
+    'doctrine' => [
+        'connection' => [
+            'orm_default' => [
+                'driverClass' => 'Doctrine\DBAL\Driver\PDOMySql\Driver',
+                'params' => [
+                    'host' => '##DB_HOST##',
+                    'user' =>'##DB_USER##',
+                    'password' => '##DB_PASSWORD##',
+                    'dbname' => '##DB_NAME##'
+                ],
+            ]
+        ],
+    ],
+];
