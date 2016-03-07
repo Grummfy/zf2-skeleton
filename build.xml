@@ -39,7 +39,14 @@
     </target>
 
 	<target name="init-db">
-		<!-- create if not exist -->
+		<mkdir dir="${project.basedir}/data/db/" />
+		<echo file="${project.basedir}/data/db/create.sql">
+			CREATE DATABASE IF NOT EXISTS `${db.dbname}`;
+		</echo>
+		<pdosqlexec url="mysql:host=${db.host};port=${db.port}"
+		            password="${db.password}"
+		            userid="${db.username}"
+		            src="${project.basedir}/data/db/create.sql" />
 	</target>
 
 	<target name="migrate-db">
