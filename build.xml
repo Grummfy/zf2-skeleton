@@ -77,4 +77,9 @@
 			</else>
 		</if>
 	</target>
+
+	<target name="tests" description="test units">
+		<exec command="vendor/bin/phpunit -c ${project.basedir}/module/Application/tests/phpunit.xml" passthru="true" />
+		<!--<phpunit pharlocation="vendor/bin/phpunit" printsummary="true" configuration="${project.basedir}/module/Application/tests/phpunit.xml" />-->
+	</target>
 </project>
