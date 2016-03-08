@@ -9,7 +9,7 @@ class UserController extends AbstractActionController
 {
     public function indexAction()
     {
-	    return new ViewModel('users', $this->getServiceLocator()->get('UserManager')->getList());
+	    return new ViewModel(['users' => $this->getServiceLocator()->get('userManager')->getList()]);
     }
 
     public function addAction()

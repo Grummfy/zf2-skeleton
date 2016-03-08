@@ -40,7 +40,7 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
 		// programatical way
 		$this->setExpectedException('Application\Service\Exception');
 
-		// declaritve way
+		// declarative way
 		// @expectedException sur la méthode
 
 		$userManager = new userManager();

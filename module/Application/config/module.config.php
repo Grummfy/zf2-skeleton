@@ -60,9 +60,23 @@ return [
 		'factories' => [
             'translator' => 'Zend\Mvc\Service\TranslatorServiceFactory',
 		],
-//		'aliases' => [
-//	        'entityManager' => 'Doctrine\ORM\EntityManager'
-//		]
+		'aliases' => [
+	        'entityManager' => 'Doctrine\ORM\EntityManager'
+		],
+	    'invokables' => [
+		    'userManager'   => 'Application\Service\UserManager',
+	    ],
+	    'initializers'  => [
+		    function ($instanceOfService, \Zend\ServiceManager\ServiceLocatorInterface $sm)
+		    {
+			    if ($instanceOfService instanceof \Application\Service\UserManager)
+			    {
+				    $repository = $sm->get('entityManager')->getRepository('Application\Entity\User');
+
+				    $instanceOfService->setRepository($repository);
+			    }
+		    },
+	    ],
 	],
 	'translator' => [
 		'locale' => 'en_US',

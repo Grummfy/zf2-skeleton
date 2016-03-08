@@ -85,6 +85,6 @@
 
 	<target name="phpunit">
 		<exec command="vendor/bin/phpunit -c ${project.basedir}/module/Application/tests/phpunit.xml" passthru="true" />
-		<!--<phpunit pharlocation="vendor/bin/phpunit" printsummary="true" configuration="${project.basedir}/module/Application/tests/phpunit.xml" />-->
+		<!--<phpunit printsummary="true" configuration="${project.basedir}/module/Application/tests/phpunit.xml" />-->
 	</target>
 </project>

@@ -21,6 +21,6 @@ Feature: User list feature
 	  | Firstname | Frederic |
 	  | Lastname | Dewinne |
 	When I follow "Edit user"
-	Then the url should match "/application/user/\d+"
+	Then the url should match "/application/user/edit/\d+"
 	And I should be on the user edit page
 	And the response status code should be 200
