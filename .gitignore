@@ -11,3 +11,4 @@ vendor
 composer.phar
 build.local.properties
 data/db/*
+public/coverage
