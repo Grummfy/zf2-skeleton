@@ -1,7 +1,6 @@
 # tag will be herited
 @user
 Feature: User list feature
-
 # space line is just here to be more readable
   Scenario: The user page should display a user list
 	Given I am on "/application/user"
@@ -9,3 +8,8 @@ Feature: User list feature
 	And I should see "Firstname"
 	And I should see "Lastname"
 
+  Scenario: The user page should have an add user button
+	Given I am on "/application/user"
+	When I follow "Add user"
+	Then I should be on "/application/user/add"
+	And the response status code should be 200
