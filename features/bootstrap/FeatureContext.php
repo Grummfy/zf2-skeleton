@@ -89,6 +89,6 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	 */
 	protected function _getEntityManager()
 	{
-		return static::$_serviceManager->get('doctrine.entitymanager.orm_default');
+		return static::$_serviceManager->get('entityManager');
 	}
 }

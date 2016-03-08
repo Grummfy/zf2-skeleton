@@ -16,10 +16,10 @@ Feature: User list feature
 
   @cleanup
   Scenario: The user list should have an edit button
-	Given I am on "/application/user"
-	And I have a stored user with:
+	Given I have a stored user with:
 	  | Firstname | Frederic |
 	  | Lastname | Dewinne |
+	And I am on "/application/user"
 	When I follow "Edit user"
 	Then the url should match "/application/user/edit/\d+"
 	And I should be on the user edit page
