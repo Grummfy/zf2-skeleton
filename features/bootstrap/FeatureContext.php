@@ -56,7 +56,6 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	    $user = new \Application\Entity\User();
 	    $hydrator->hydrate($userData, $user);
 	    $this->_getEntityManager()->persist($user);
-
 	    $this->_getEntityManager()->flush();
 
 	    $this->_temporaryUser = $user;
