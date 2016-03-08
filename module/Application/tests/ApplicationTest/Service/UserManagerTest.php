@@ -2,6 +2,7 @@
 namespace ApplicationTest\Service;
 
 use Application\Service\UserManager;
+use Application\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class UserManagerTest extends \PHPUnit_Framework_TestCase
@@ -45,5 +46,23 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
 
 		$userManager = new userManager();
 		$userManager->getList();
+	}
+
+	public function testGetOneUser()
+	{
+		$userManager = new UserManager();
+		$repository = $this->getMockBuilder('Doctrine\ORM\EntityRepository')
+		                   ->disableOriginalConstructor()
+		                   ->getMock();
+
+		$result = new User();
+
+		$userManager->setRepository($repository);
+		$repository->expects($this->once())
+		           ->method('find')
+						->with(42)
+		           ->willReturn($result);
+
+		$this->assertSame($result, $userManager->get(42));
 	}
 }

@@ -41,13 +41,27 @@ return [
 						'options' => [
 							'route'    => '/[:controller[/:action]]',
 							'constraints' => [
-                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+								'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+								'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
 							],
 							'defaults' => [
 							],
 						],
 					],
+					'with_id' => [
+						'type'    => 'Segment',
+						'options' => [
+							'route'    => '/:controller/:action/:id',
+							'constraints' => [
+								'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+								'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+							    'id'         => '[0-9]*',
+							],
+							'defaults' => [
+							],
+						],
+					],
+
 				],
 			],
 		],

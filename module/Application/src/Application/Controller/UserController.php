@@ -12,8 +12,13 @@ class UserController extends AbstractActionController
 	    return new ViewModel(['users' => $this->getServiceLocator()->get('userManager')->getList()]);
     }
 
-    public function addAction()
-    {
-        return new ViewModel();
-    }
+	public function addAction()
+	{
+		return new ViewModel();
+	}
+
+	public function editAction()
+	{
+		return new ViewModel(['user' => $this->getServiceLocator()->get('userManager')->get($this->params('id'))]);
+	}
 }

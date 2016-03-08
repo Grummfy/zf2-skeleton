@@ -24,4 +24,13 @@ class UserManager
 		}
 		return $this->_repository->findAll();
 	}
+
+	public function get($userId)
+	{
+		if (!$this->_repository)
+		{
+			throw new Exception();
+		}
+		return $this->_repository->find($userId);
+	}
 }

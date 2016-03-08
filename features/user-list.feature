@@ -22,5 +22,6 @@ Feature: User list feature
 	And I am on "/application/user"
 	When I follow "Edit user"
 	Then the url should match "/application/user/edit/\d+"
-	And I should be on the user edit page
+	And the url should match:
+	  | /application/user/edit/ | %temporaryUser% |
 	And the response status code should be 200

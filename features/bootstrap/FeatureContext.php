@@ -61,13 +61,26 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	    $this->_temporaryUser = $user;
     }
 
-    /**
-     * @Then I should be on the user edit page
-     */
-    public function iShouldBeOnTheUserEditPage()
-    {
-        throw new PendingException();
-    }
+	/**
+	 * @Then The url should match:
+	 */
+	public function theUrlShouldMatch(TableNode $table)
+	{
+		$url = $this->_buildUrl($table);
+
+		return $this->assertPageAddress($url);
+	}
+
+	/**
+	 * @When I go on page:
+	 */
+	public function iGoOnPage(TableNode $table)
+	{
+		$url = $this->_buildUrl($table);
+
+		$s = $this->getSession();
+		$s->visit($this->locatePath($url));
+	}
 
 	/**
 	 * @AfterScenario @cleanup
@@ -90,5 +103,27 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	protected function _getEntityManager()
 	{
 		return static::$_serviceManager->get('entityManager');
+	}
+
+	/**
+	 * @param TableNode $table
+	 *
+	 * @return string
+	 */
+	protected function _buildUrl(TableNode $table)
+	{
+		// build full url
+		$url = '';
+		foreach ($table->getRow(0) as $partUrl)
+		{
+			if (isset($this->{'_' . trim($partUrl, '%')}))
+			{
+				$partUrl = $this->{'_' . trim($partUrl, '%')}->getId();
+			}
+
+			$url .= $partUrl;
+		}
+
+		return $url;
 	}
 }
