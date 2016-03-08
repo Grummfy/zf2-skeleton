@@ -9,7 +9,8 @@ class UserController extends AbstractActionController
 {
     public function indexAction()
     {
-        return new ViewModel();
+	    return new ViewModel();
+//        return new ViewModel('users', $this->getServiceLocator()->get('doctrine.entitymanager.orm_default')->getRepository('Application\Entity\User')->all());
     }
 
     public function addAction()

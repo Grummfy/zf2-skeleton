@@ -14,6 +14,7 @@ Feature: User list feature
 	Then I should be on "/application/user/add"
 	And the response status code should be 200
 
+  @cleanup
   Scenario: The user list should have an edit button
 	Given I am on "/application/user"
 	And I have a stored user with:

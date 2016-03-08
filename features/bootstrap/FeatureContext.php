@@ -71,6 +71,21 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
     }
 
 	/**
+	 * @AfterScenario @cleanup
+	 */
+	public function cleanup()
+	{
+		// will be executed for all scenario with this tags (after it)
+
+		// remove created users
+		if ($this->_temporaryUser)
+		{
+			$this->_getEntityManager()->remove($this->_temporaryUser);
+			$this->_getEntityManager()->flush();
+		}
+	}
+
+	/**
 	 * @return \Doctrine\ORM\EntityManager
 	 */
 	protected function _getEntityManager()
