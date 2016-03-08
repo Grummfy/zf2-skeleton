@@ -14,7 +14,6 @@ Feature: User edition
   Scenario Outline: Display an error on a non existing user page
 	Given I am on "<url>"
 	Then the response status code should be 404
-	And I should see "The user has not been found"
 
 	Examples:
 	| url                          |

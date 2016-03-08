@@ -60,9 +60,24 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
 		$userManager->setRepository($repository);
 		$repository->expects($this->once())
 		           ->method('find')
-						->with(42)
+		           ->with(42)
 		           ->willReturn($result);
 
 		$this->assertSame($result, $userManager->get(42));
+	}
+
+	public function testGetOneUserThatDoesNotExist()
+	{
+		$userManager = new UserManager();
+		$repository = $this->getMockBuilder('Doctrine\ORM\EntityRepository')
+		                   ->disableOriginalConstructor()
+		                   ->getMock();
+
+		$userManager->setRepository($repository);
+		$repository->expects($this->once())
+		           ->method('find')
+		           ->with(42);
+
+		$this->assertNull($userManager->get(42));
 	}
 }

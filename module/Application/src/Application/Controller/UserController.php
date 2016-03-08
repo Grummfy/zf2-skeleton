@@ -19,6 +19,16 @@ class UserController extends AbstractActionController
 
 	public function editAction()
 	{
-		return new ViewModel(['user' => $this->getServiceLocator()->get('userManager')->get($this->params('id'))]);
+		$user = $this->getServiceLocator()->get('userManager')->get($this->params('id'));
+
+		if (null === $user)
+		{
+			$this->getResponse()
+				->setStatusCode(404)
+				->setReasonPhrase('error-user-not-found');
+			return false;
+		}
+
+		return new ViewModel(['user' => $user]);
 	}
 }
