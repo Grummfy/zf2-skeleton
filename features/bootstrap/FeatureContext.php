@@ -3,12 +3,36 @@
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Tester\Exception\PendingException;
+use Behat\Gherkin\Node\TableNode;
+use Behat\MinkExtension\Context\MinkContext;
 
 /**
  * Defines application features from the specific context.
  */
-class FeatureContext extends \Behat\MinkExtension\Context\MinkContext implements Context, SnippetAcceptingContext
+class FeatureContext extends MinkContext implements Context, SnippetAcceptingContext
 {
+	/**
+	 * @var \Zend\ServiceManager\ServiceManager
+	 */
+	protected static $_serviceManager;
+
+	/**
+	 * @var \Application\Entity\User
+	 */
+	protected $_temporaryUser;
+
+	/**
+	 * Will initilized the zf app
+	 */
+	public static function bootstrapApplication()
+	{
+		if (!isset(static::$_serviceManager))
+		{
+			\ApplicationTest\Bootstrap::init();
+			static::$_serviceManager = \ApplicationTest\Bootstrap::getServiceManager();
+		}
+	}
+
     /**
      * Initializes context.
      *
@@ -18,14 +42,24 @@ class FeatureContext extends \Behat\MinkExtension\Context\MinkContext implements
      */
     public function __construct()
     {
+	    self::bootstrapApplication();
     }
 
     /**
-     * @Given I have a stored user
+     * @Given I have a stored user with:
      */
-    public function iHaveAStoredUser()
+    public function iHaveAStoredUserWith(TableNode $table)
     {
-        throw new PendingException();
+	    $userData = $table->getRowsHash();
+	    /* @var \Zend\Stdlib\Hydrator\ClassMethods $hydrator */
+	    $hydrator = static::$_serviceManager->get('hydratorManager')->get('classMethods');
+	    $user = new \Application\Entity\User();
+	    $hydrator->hydrate($userData, $user);
+	    $this->_getEntityManager()->persist($user);
+
+	    $this->_getEntityManager()->flush();
+
+	    $this->_temporaryUser = $user;
     }
 
     /**
@@ -36,4 +70,11 @@ class FeatureContext extends \Behat\MinkExtension\Context\MinkContext implements
         throw new PendingException();
     }
 
+	/**
+	 * @return \Doctrine\ORM\EntityManager
+	 */
+	protected function _getEntityManager()
+	{
+		return static::$_serviceManager->get('doctrine.entitymanager.orm_default');
+	}
 }
