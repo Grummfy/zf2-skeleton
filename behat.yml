@@ -4,7 +4,12 @@
 default:
   extensions:
       Behat\MinkExtension:
-        base_url: http://127.0.0.1:8000
+        base_url: http://127.0.0.1
         goutte: ~
         #selenium2:
         #  wd_host: http://localhost:4444/wd/hub
+
+dev:
+  extensions:
+      Behat\MinkExtension:
+        base_url: http://127.0.0.1:8000
