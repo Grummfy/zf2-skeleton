@@ -77,7 +77,13 @@
 		</if>
 	</target>
 
-	<target name="tests" description="test units">
+	<target name="tests" description="test units" depends="behat, phpunit" />
+
+	<target name="behat">
+		<exec command="vendor/bin/behat --tags user --profile dev" passthru="true" />
+	</target>
+
+	<target name="phpunit">
 		<exec command="vendor/bin/phpunit -c ${project.basedir}/module/Application/tests/phpunit.xml" passthru="true" />
 		<!--<phpunit pharlocation="vendor/bin/phpunit" printsummary="true" configuration="${project.basedir}/module/Application/tests/phpunit.xml" />-->
 	</target>
