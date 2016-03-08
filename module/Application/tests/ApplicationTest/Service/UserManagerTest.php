@@ -27,10 +27,23 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
 		$userManager->setRepository($repository);
 		$result = new ArrayCollection();
 
+		// mock => pas de stub
 		$repository->expects($this->once())
 			->method('findAll')
 			->willReturn($result);
 
 		$this->assertSame($result, $userManager->getList());
+	}
+
+	public function testGetListThrowsExceptionWhenNoRepositoryProvided()
+	{
+		// programatical way
+		$this->setExpectedException('Application\Service\Exception');
+
+		// declaritve way
+		// @expectedException sur la méthode
+
+		$userManager = new userManager();
+		$userManager->getList();
 	}
 }

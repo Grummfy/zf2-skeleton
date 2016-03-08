@@ -18,6 +18,10 @@ class UserManager
 
 	public function getList()
 	{
+		if (!$this->_repository)
+		{
+			throw new Exception();
+		}
 		return $this->_repository->findAll();
 	}
 }
