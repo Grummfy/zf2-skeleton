@@ -1,9 +1,9 @@
 <form method="post">
 	<label for="lastname">Lastname</label><br />
-	<input type="text" name="lastname" id="lastname" value="<?= $user ? $user->getLastname() : '' ?>" /><br /><br />
+	<input type="text" name="lastname" id="lastname" value="<?= $user->getLastname() ?>" /><br /><br />
 
 	<label for="firstname">Firstname</label><br />
-	<input type="text" name="firstname" id="firstname" value="<?= $user ? $user->getFirstname() : '' ?>" /><br /><br />
+	<input type="text" name="firstname" id="firstname" value="<?= $user->getFirstname() ?>" /><br /><br />
 
 	<button type="submit">Edit</button>
 </form>
