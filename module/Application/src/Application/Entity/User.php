@@ -39,6 +39,11 @@ class User
     protected $lastname;
 
     /**
+     * @var string
+     */
+    protected $temporaryAvatar;
+
+    /**
      * @return int
      */
     public function getId()
@@ -79,6 +84,24 @@ class User
     public function setLastname($lastname)
     {
         $this->lastname = $lastname;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTemporaryAvatar()
+    {
+        return $this->temporaryAvatar;
+    }
+
+    /**
+     * @param string $temporaryAvatar
+     * @return User
+     */
+    public function setTemporaryAvatar($temporaryAvatar)
+    {
+        $this->temporaryAvatar = $temporaryAvatar;
         return $this;
     }
     

@@ -20,7 +20,8 @@
     "squizlabs/php_codesniffer": "^2.3",
     "behat/behat": "^3.0",
     "behat/mink-extension": "~2.0",
-    "behat/mink-goutte-driver": "~1.1"
+    "behat/mink-goutte-driver": "~1.1",
+    "mikey179/vfsStream": "^1.6.2"
   },
   "autoload-dev": {
     "psr-4": {

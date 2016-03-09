@@ -1,11 +1,17 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: fred
+ * Date: 08/03/16
+ * Time: 11:50
+ */
 
 namespace ApplicationTest\Service;
 
 use Application\Entity\User;
 use Application\Service\UserManager;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\EntityManagerInterface;
+use org\bovigo\vfs\vfsStream;
 
 class UserManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,24 +19,36 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
     {
         $userManager = new UserManager();
         $repository = $this->getMockBuilder('Doctrine\ORM\EntityRepository')
-                           ->disableOriginalConstructor()
-                           ->getMock();
-
+            ->disableOriginalConstructor()
+            ->getMock();
+        
         $this->assertSame($userManager, $userManager->setRepository($repository));
-
+        
         $this->assertAttributeSame($repository, 'repository', $userManager);
     }
-
+    
     public function testEntityManagerSetterReallySetEntityManagerProperty()
     {
         $userManager = new UserManager();
-        $manager = $this->getMockBuilder(EntityManagerInterface::class)
-                           ->disableOriginalConstructor()
-                           ->getMock();
-
-        $this->assertSame($userManager, $userManager->setEntityManager($manager));
-
-        $this->assertAttributeSame($manager, 'entityManager', $userManager);
+        $entityManager = $this->getMockBuilder('Doctrine\ORM\EntityManagerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        
+        $this->assertSame($userManager, $userManager->setEntityManager($entityManager));
+        
+        $this->assertAttributeSame($entityManager, 'entityManager', $userManager);
+    }
+    
+    public function testFileStorageSetterReallySetFileStorageProperty()
+    {
+        $userManager = new UserManager();
+        $fileStorage = $this->getMockBuilder('Application\Service\FileStorage\FileStorageInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        
+        $this->assertSame($userManager, $userManager->setFileStorage($fileStorage));
+        
+        $this->assertAttributeSame($fileStorage, 'fileStorage', $userManager);
     }
     
     public function testGetListActuallyGetUserListFromDatabase()
@@ -76,26 +94,60 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
         $userManager = new UserManager();
         $userManager->getList();
     }
-
-    public function testUserSave()
+    
+    public function testSaveUserActuallySaveInDatabase()
     {
         $userManager = new UserManager();
-
-        $manager = $this->getMockBuilder(EntityManagerInterface::class)
-                        ->disableOriginalConstructor()
-                        ->getMock();
-        $userManager->setEntityManager($manager);
-
         $user = new User();
 
-        $manager->expects($this->once())
-                      ->id('persist-id')
-                      ->method('persist')
-                      ->with($user);
-        $manager->expects($this->once())
-                      ->after('persist-id')
-                      ->method('flush');
+        $entityManager = $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        
+        $userManager->setEntityManager($entityManager);
+        
+        $entityManager->expects($this->once())
+            ->id('persist')
+            ->method('persist')
+            ->with($user);
+        $entityManager->expects($this->once())
+            ->after('persist')
+            ->method('flush');
+        
+        $userManager->save($user);
+    }
+    
+    public function testSaveUserWithTemporaryAvatarActuallyStoreNewAvatarOnFileStorage()
+    {
+        $userManager = new UserManager();
+        $id = 42;
+        $avatarContent = 'totoImage';
+        $vfs = vfsStream::setup('root', null, [
+            'tmp' => [
+                'toto.jpg' => $avatarContent
+            ]
+        ]);
+        $avatar = $vfs->url() . '/tmp/toto.jpg';
+        $user = $this->getMock('Application\Entity\User');
+        $user->expects($this->atLeastOnce())
+            ->method('getId')
+            ->willReturn($id);
+        
+        $user->expects($this->atLeastOnce())
+            ->method('getTemporaryAvatar')
+            ->willReturn($avatar);
 
+        $entityManager = $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        
+        $fileStorage = $this->getMockBuilder('Application\Service\FileStorage\FileStorageInterface')
+            ->setMethods(['filePutContent'])
+            ->getMock();
+        $userManager->setFileStorage($fileStorage);
+        
+        $fileStorage->expects($this->once())
+            ->method('filePutContent')
+            ->with('/' . $id . '/toto.jpg', $avatarContent);
+        
+        $userManager->setEntityManager($entityManager);
+        
         $userManager->save($user);
     }
 }

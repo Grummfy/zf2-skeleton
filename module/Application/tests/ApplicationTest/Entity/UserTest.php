@@ -59,6 +59,25 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeEquals($lastname, 'lastname', $user);
     }
     
+    public function testTemporaryAvatarGetterActuallyReturnTemporaryAvatarProperty()
+    {
+        $user = new User();
+        
+        $temporaryAvatar = '/tmp/toto.jpg';
+        $this->setProperty($user, 'temporaryAvatar', $temporaryAvatar);
+        
+        $this->assertEquals($temporaryAvatar, $user->getTemporaryAvatar());
+    }
+
+    public function testTemporaryAvatarSetterActuallySetTemporaryAvatarProperty()
+    {
+        $user = new User();
+
+        $temporaryAvatar = '/tmp/toto.jpg';
+        $this->assertSame($user, $user->setTemporaryAvatar($temporaryAvatar));
+        $this->assertAttributeEquals($temporaryAvatar, 'temporaryAvatar', $user);
+    }
+    
     protected function setProperty($object, $property, $value)
     {
         $reflection = new \ReflectionObject($object);

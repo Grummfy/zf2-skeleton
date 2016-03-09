@@ -1,13 +1,14 @@
 <?php if ($user) : ?>
-<form>
+<form method="post">
     <label>
         Firstname
-        <input type="text" value="<?= $user->getFirstname() ?>" />
+        <input name="Firstname" type="text" value="<?= $user->getFirstname() ?>" />
     </label>
     <label>
         Lastname
-        <input type="text" value="<?= $user->getLastname() ?>" />
+        <input name="Lastname" type="text" value="<?= $user->getLastname() ?>" />
     </label>
+    <input type="submit" value="Save" class="btn btn-primary">
 </form>
 <?php else: ?>
 <p class="alert alert-danger">
