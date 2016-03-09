@@ -1,16 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: fred
- * Date: 08/03/16
- * Time: 11:50
- */
 
 namespace ApplicationTest\Service;
 
 use Application\Entity\User;
 use Application\Service\UserManager;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManagerInterface;
 
 class UserManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,12 +13,24 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
     {
         $userManager = new UserManager();
         $repository = $this->getMockBuilder('Doctrine\ORM\EntityRepository')
-            ->disableOriginalConstructor()
-            ->getMock();
-        
+                           ->disableOriginalConstructor()
+                           ->getMock();
+
         $this->assertSame($userManager, $userManager->setRepository($repository));
-        
+
         $this->assertAttributeSame($repository, 'repository', $userManager);
+    }
+
+    public function testEntityManagerSetterReallySetEntityManagerProperty()
+    {
+        $userManager = new UserManager();
+        $manager = $this->getMockBuilder(EntityManagerInterface::class)
+                           ->disableOriginalConstructor()
+                           ->getMock();
+
+        $this->assertSame($userManager, $userManager->setEntityManager($manager));
+
+        $this->assertAttributeSame($manager, 'entityManager', $userManager);
     }
     
     public function testGetListActuallyGetUserListFromDatabase()
@@ -68,5 +75,27 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
     {
         $userManager = new UserManager();
         $userManager->getList();
+    }
+
+    public function testUserSave()
+    {
+        $userManager = new UserManager();
+
+        $manager = $this->getMockBuilder(EntityManagerInterface::class)
+                        ->disableOriginalConstructor()
+                        ->getMock();
+        $userManager->setEntityManager($manager);
+
+        $user = new User();
+
+        $manager->expects($this->once())
+                      ->id('persist-id')
+                      ->method('persist')
+                      ->with($user);
+        $manager->expects($this->once())
+                      ->after('persist-id')
+                      ->method('flush');
+
+        $userManager->save($user);
     }
 }
