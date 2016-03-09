@@ -98,10 +98,10 @@ class FeatureContext extends \Behat\MinkExtension\Context\MinkContext implements
 
     /**
      * @When I go to:
+     * @Given I am on:
      */
     public function iGoTo(TableNode $table)
     {
         return $this->visit($this->getUrl($table->getRow(0)));
     }
-
 }

@@ -40,10 +40,11 @@ class UserController extends AbstractActionController
 
 	    if ($this->getRequest()->isPost())
 	    {
-		    $user->setFirstname($this->params('Firstname'));
-		    $user->setLastname($this->params('Lastname'));
+		    $user->setFirstname($this->params()->fromPost('Firstname'));
+		    $user->setLastname($this->params()->fromPost('Lastname'));
 		    $userManager->save($user);
-		    $this->flashMessenger()->addSuccessMessage($user->getFirstname() . ' ' . $user->getLastname() . ' has been saved');
+		    //$this->flashMessenger()->addSuccessMessage($user->getFirstname() . ' ' . $user->getLastname() . ' has been saved');
+		    $this->redirect()->toUrl('/user');
 	    }
 
         $data = [
