@@ -15,6 +15,11 @@ use org\bovigo\vfs\vfsStream;
 
 class UserManagerTest extends \PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        echo 'will be executed before each test';
+    }
+
     public function testRepositorySetterReallySetRepositoryProperty()
     {
         $userManager = new UserManager();
