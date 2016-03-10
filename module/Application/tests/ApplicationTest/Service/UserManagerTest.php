@@ -15,70 +15,85 @@ use org\bovigo\vfs\vfsStream;
 
 class UserManagerTest extends \PHPUnit_Framework_TestCase
 {
+    protected $userManager;
+    
     public function setUp()
     {
-        echo 'will be executed before each test';
+//        echo 'will be executed before each test';
+        $this->userManager = new UserManager();
     }
 
+//    public function tearDown()
+//    {
+//        // will be executed after each test
+//        parent::tearDown();
+//        unset($this->userManager);
+//        echo 'end' . PHP_EOL;
+//    }
+
+    /**
+     *  @small
+     */
     public function testRepositorySetterReallySetRepositoryProperty()
     {
-        $userManager = new UserManager();
+        sleep(5);
+        $this->userManager = new UserManager();
         $repository = $this->getMockBuilder('Doctrine\ORM\EntityRepository')
             ->disableOriginalConstructor()
             ->getMock();
         
-        $this->assertSame($userManager, $userManager->setRepository($repository));
+        $this->assertSame($this->userManager, $this->userManager->setRepository($repository));
         
-        $this->assertAttributeSame($repository, 'repository', $userManager);
+        $this->assertAttributeSame($repository, 'repository', $this->userManager);
     }
     
     public function testEntityManagerSetterReallySetEntityManagerProperty()
     {
-        $userManager = new UserManager();
+        $this->userManager = new UserManager();
         $entityManager = $this->getMockBuilder('Doctrine\ORM\EntityManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
         
-        $this->assertSame($userManager, $userManager->setEntityManager($entityManager));
+        $this->assertSame($this->userManager, $this->userManager->setEntityManager($entityManager));
         
-        $this->assertAttributeSame($entityManager, 'entityManager', $userManager);
+        $this->assertAttributeSame($entityManager, 'entityManager', $this->userManager);
     }
     
     public function testFileStorageSetterReallySetFileStorageProperty()
     {
-        $userManager = new UserManager();
+        $this->userManager = new UserManager();
         $fileStorage = $this->getMockBuilder('Application\Service\FileStorage\FileStorageInterface')
             ->disableOriginalConstructor()
             ->getMock();
         
-        $this->assertSame($userManager, $userManager->setFileStorage($fileStorage));
+        $this->assertSame($this->userManager, $this->userManager->setFileStorage($fileStorage));
         
-        $this->assertAttributeSame($fileStorage, 'fileStorage', $userManager);
+        $this->assertAttributeSame($fileStorage, 'fileStorage', $this->userManager);
     }
     
     public function testGetListActuallyGetUserListFromDatabase()
     {
-        $userManager = new UserManager();
+        $this->userManager = new UserManager();
         $repository = $this->getMockBuilder('Doctrine\ORM\EntityRepository')
             ->disableOriginalConstructor()
             ->getMock();
-        $userManager->setRepository($repository);
+        $this->userManager->setRepository($repository);
         $result = new ArrayCollection();
         
         $repository->expects($this->once())
             ->method('findAll')
             ->willReturn($result);
         
-        $this->assertSame($result, $userManager->getList());
+        $this->assertSame($result, $this->userManager->getList());
     }
     
     public function testGetActuallyGetAUserFromDatabase()
     {
-        $userManager = new UserManager();
+        $this->userManager = new UserManager();
         $repository = $this->getMockBuilder('Doctrine\ORM\EntityRepository')
             ->disableOriginalConstructor()
             ->getMock();
-        $userManager->setRepository($repository);
+        $this->userManager->setRepository($repository);
         
         $result = new User();
         $id = 42;
@@ -88,7 +103,7 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
             ->with($id)
             ->willReturn($result);
         
-        $this->assertSame($result, $userManager->get($id));
+        $this->assertSame($result, $this->userManager->get($id));
     }
 
     /**
@@ -96,18 +111,18 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetListThrowsExceptionWhenNoRepositoryIsProvided()
     {
-        $userManager = new UserManager();
-        $userManager->getList();
+        $this->userManager = new UserManager();
+        $this->userManager->getList();
     }
     
     public function testSaveUserActuallySaveInDatabase()
     {
-        $userManager = new UserManager();
+        $this->userManager = new UserManager();
         $user = new User();
 
         $entityManager = $this->getMock('Doctrine\ORM\EntityManagerInterface');
         
-        $userManager->setEntityManager($entityManager);
+        $this->userManager->setEntityManager($entityManager);
         
         $entityManager->expects($this->once())
             ->id('persist')
@@ -117,12 +132,12 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
             ->after('persist')
             ->method('flush');
         
-        $userManager->save($user);
+        $this->userManager->save($user);
     }
     
     public function testSaveUserWithTemporaryAvatarActuallyStoreNewAvatarOnFileStorage()
     {
-        $userManager = new UserManager();
+        $this->userManager = new UserManager();
         $id = 42;
         $avatarContent = 'totoImage';
         $vfs = vfsStream::setup('root', null, [
@@ -145,14 +160,14 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
         $fileStorage = $this->getMockBuilder('Application\Service\FileStorage\FileStorageInterface')
             ->setMethods(['filePutContent'])
             ->getMock();
-        $userManager->setFileStorage($fileStorage);
+        $this->userManager->setFileStorage($fileStorage);
         
         $fileStorage->expects($this->once())
             ->method('filePutContent')
             ->with('/' . $id . '/toto.jpg', $avatarContent);
         
-        $userManager->setEntityManager($entityManager);
+        $this->userManager->setEntityManager($entityManager);
         
-        $userManager->save($user);
+        $this->userManager->save($user);
     }
 }

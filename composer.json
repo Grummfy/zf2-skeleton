@@ -13,7 +13,8 @@
     "zendframework/zendframework": "~2.5",
     "doctrine/doctrine-orm-module": "~0.9.1",
     "doctrine/migrations": "~1.1",
-    "continuousphp/aws-sdk-phing": "~0.1"
+    "continuousphp/aws-sdk-phing": "~0.1",
+    "phpunit/php-invoker": "^1.1"
   },
   "require-dev": {
     "phpunit/phpunit": "^4.6",
